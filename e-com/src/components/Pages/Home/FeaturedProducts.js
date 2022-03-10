@@ -1,12 +1,11 @@
 import React from "react";
 
-const JewelleryPouches=() =>{
+const FeaturedProducts=() =>{
     return(
-        <section class="text-center " style={{
+        <section class="text-center " id="faetured-products"style={{
             backgroundColor:"#0d0115",
             marginRight:"100px",
             marginLeft:"100px" ,
-            marginBottom:"100px"
               
           }}>
   
@@ -16,7 +15,7 @@ const JewelleryPouches=() =>{
        padding:"30px",
        fontSize:"32px",
        fontStyle: "Large"
-    }}>Jewellery Pouches & Bags</h1>
+    }}>Featured Products</h1>
 
   
     
@@ -27,7 +26,7 @@ const JewelleryPouches=() =>{
               alt="sample photo"/>
        
         </div>
-        <p style={{fontSize:"20px"}}> Chain & Set Bags</p>
+        <p style={{fontSize:"20px"}}> Jewellery Bags</p>
       </div>  
       <div class="col-lg-3 col-md-6 mb-lg-0 mb-4">
         <div class="card card-cascade narrower card-ecommerce">
@@ -36,7 +35,7 @@ const JewelleryPouches=() =>{
               alt="sample photo"/>
           </div>
         </div>
-        <p style={{fontSize:"20px"}}> Bangle Bags</p>
+        <p style={{fontSize:"20px"}}>Jewellery Purses</p>
       </div>
       <div class="col-lg-3 col-md-6 mb-md-0 mb-4">
         <div class="card card-cascade narrower card-ecommerce">
@@ -45,7 +44,7 @@ const JewelleryPouches=() =>{
               alt="sample photo"/>
           </div>     
         </div> 
-        <p style={{fontSize:"20px"}}> Purse Set </p> 
+        <p style={{fontSize:"20px"}}> Jewellery Boxes </p> 
       </div>
       <div class="col-lg-3 col-md-6">
         <div class="card card-cascade narrower card-ecommerce">
@@ -54,7 +53,7 @@ const JewelleryPouches=() =>{
               alt="sample photo"/>
           </div>
         </div>
-        <p style={{fontSize:"20px"}}> Single Purses</p> 
+        <p style={{fontSize:"20px"}}> Jewellery Tools</p> 
       </div>
     </div>
   
@@ -64,4 +63,4 @@ const JewelleryPouches=() =>{
 
 }
 
-export default JewelleryPouches;
+export default FeaturedProducts;

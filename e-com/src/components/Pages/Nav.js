@@ -1,9 +1,9 @@
 import React from 'react'
-import './home.css'
+import './Home/home.css'
 const Nav=()=>{
     return(
 
-        <nav class="navbar navbar-expand-lg navbar-dark fixed top" style={{
+        <nav class="navbar navbar-expand-lg navbar-dark sticky" style={{
           backgroundColor:"#26122e"
 
         }}>

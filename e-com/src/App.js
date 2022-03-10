@@ -3,7 +3,8 @@ import {
   Switch,
   Route
 } from 'react-router-dom'
-import Home from "./components/Pages/Home";
+import Home from "./components/Pages/Home/Home";
+import 'font-awesome/css/font-awesome.min.css';
 
 function App() {
   return (

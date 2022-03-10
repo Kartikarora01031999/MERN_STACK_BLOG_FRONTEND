@@ -17,19 +17,45 @@ h2, h4, h5,h6,p{
 }
 h3 { 
   font-family: Aladin;
-  font-size: 14px;
+  font-size: 18px;
   font-style: normal;
   color: pink;
 
 } 
+
+.h6{
+  font-family: Aladin;
+  color: pink;
+  
+}
+
 p { font-family: Aladin; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 20px; }
 blockquote { font-family: Aladin; font-size: 21px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 30px; }
 pre { font-family: Aladin; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 18.5714px; }
 
 .banner{
-  margin-top: 0 !important;
+  margin-top: 6% !important;
   margin-bottom: 0% !important;
   width: 100%;
   height: auto;
 
+}
+
+.navbar.sticky{
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+}
+
+.btn-primary{
+  background-color: #26122e;
+  border-color: #0d0115;
+}
+
+@media screen and (max-width: 480px){
+  section {
+    padding-left: 10px;
+    padding-right: 10px;
+
+  }
 }

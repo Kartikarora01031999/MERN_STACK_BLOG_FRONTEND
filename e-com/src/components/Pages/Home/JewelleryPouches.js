@@ -1,9 +1,9 @@
 import React from "react";
 
-const JewelleryBoxes=() =>{
+const JewelleryPouches=() =>{
     return(
-        <section class="text-center " style={{
-            backgroundColor:"#26122e",
+        <section class="text-center " id="jewellery-pouches"style={{
+            backgroundColor:"#0d0115",
             marginRight:"100px",
             marginLeft:"100px" ,
               
@@ -15,7 +15,7 @@ const JewelleryBoxes=() =>{
        padding:"30px",
        fontSize:"32px",
        fontStyle: "Large"
-    }}>Jewellery Boxes</h1>
+    }}>Jewellery Pouches & Bags</h1>
 
   
     
@@ -26,7 +26,7 @@ const JewelleryBoxes=() =>{
               alt="sample photo"/>
        
         </div>
-        <p style={{fontSize:"20px"}}> Chain Boxes</p>
+        <p style={{fontSize:"20px"}}> Chain & Set Bags</p>
       </div>  
       <div class="col-lg-3 col-md-6 mb-lg-0 mb-4">
         <div class="card card-cascade narrower card-ecommerce">
@@ -35,7 +35,7 @@ const JewelleryBoxes=() =>{
               alt="sample photo"/>
           </div>
         </div>
-        <p style={{fontSize:"20px"}}> Set Boxes</p>
+        <p style={{fontSize:"20px"}}> Bangle Bags</p>
       </div>
       <div class="col-lg-3 col-md-6 mb-md-0 mb-4">
         <div class="card card-cascade narrower card-ecommerce">
@@ -44,7 +44,7 @@ const JewelleryBoxes=() =>{
               alt="sample photo"/>
           </div>     
         </div> 
-        <p style={{fontSize:"20px"}}> Ring & Top Boxes</p> 
+        <p style={{fontSize:"20px"}}> Purse Set </p> 
       </div>
       <div class="col-lg-3 col-md-6">
         <div class="card card-cascade narrower card-ecommerce">
@@ -53,7 +53,7 @@ const JewelleryBoxes=() =>{
               alt="sample photo"/>
           </div>
         </div>
-        <p style={{fontSize:"20px"}}> Bangle Boxes</p> 
+        <p style={{fontSize:"20px"}}> Single Purses</p> 
       </div>
     </div>
   
@@ -63,4 +63,4 @@ const JewelleryBoxes=() =>{
 
 }
 
-export default JewelleryBoxes;
+export default JewelleryPouches;
