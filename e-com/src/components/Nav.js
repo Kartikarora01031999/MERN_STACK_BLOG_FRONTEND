@@ -1,5 +1,5 @@
 import React from 'react'
-import './Home/home.css'
+import './Pages/Home/home.css'
 const Nav=()=>{
     return(
 
@@ -45,10 +45,20 @@ const Nav=()=>{
       </li>
     </ul>
     </div>
-    <form class="form-inline my-2 my-lg-0">
+    <div class="row mt-2">
+    <div class="form-inline my-2 my-lg-0 col-2">
+    <a href="#" class="btn rounded text-white p-3">
+        <i className="fa fa-user"></i></a>
+    </div>
+    <div class="form-inline my-2 my-lg-0 col-2">
+    <a href="#" class="btn rounded text-white p-3">
+        <i className="fa fa-shopping-cart"></i></a>
+    </div>
+    <form class="form-inline my-2 my-lg-0 col-8">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-      <button class="btn btn-outline-success my-2 my-sm-0 header" type="submit">Search</button>
     </form>
+    </div>
+
   </div>
 
 </nav>

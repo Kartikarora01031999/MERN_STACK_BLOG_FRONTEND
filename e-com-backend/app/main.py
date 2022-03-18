@@ -7,6 +7,7 @@ from flask_mongoengine import MongoEngine
 import cloudinary
 import cloudinary.uploader
 import pymongo
+from models import User,Cart,Order
 from pymongo import MongoClient, ReturnDocument
 import urllib
 from bson.json_util import dumps,loads
@@ -46,9 +47,11 @@ pb = Firebase(firebaseConfig)
 
 sendgrid_api_key = os.getenv('SENDGRID_API_KEY')
 
-User = ecom_db["User"]
-JewelleryBox = ecom_db["JewelleryBox"]
-JewelleryBag = ecom_db["JewelleryBag"]
+users = ecom_db["User"]
+jewellery_boxes = ecom_db["JewelleryBox"]
+jewellery_bages = ecom_db["JewelleryBag"]
+carts = ecom_db["Cart"]
+
 
 #Wrap check token
 def check_token(f):
@@ -81,7 +84,7 @@ def create_update_user():
     print(request.user)
     email=request.user["email"]
     name = request.json["name"]
-    user=User.find_one_and_update({"email": email},{"$set":{"name":name, "email":email}}, return_document=ReturnDocument.AFTER)
+    user=users.find_one_and_update({"email": email},{"$set":{"name":name, "email":email}}, return_document=ReturnDocument.AFTER)
     if user:
         return jsonify({"data": user}),200
     else:
@@ -95,7 +98,7 @@ def create_update_user():
         "cart_id":"",
         "Address":""
         }
-        user=User.insert_one(doc)
+        user=users.insert_one(doc)
         return jsonify({"message": "User Created"}),200
 
 
@@ -109,7 +112,7 @@ def current_user():
     Api to fetch Current User 
 
     '''
-    current_user =json.loads(dumps(User.find_one({'email': request.user["email"]}))) 
+    current_user =json.loads(dumps(users.find_one({'email': request.user["email"]}))) 
     if current_user:
         return jsonify({"data": current_user}),200
     else:
