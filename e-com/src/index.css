@@ -1,8 +1,9 @@
 body{
   background-color: #0d0115;
   font-size: 16px;
+  height: 100%;
 }
-section{
+section, .banner{
   padding-left: 100px;
   padding-right: 100px;
 }
@@ -41,6 +42,9 @@ pre { font-family: Aladin; font-size: 13px; font-style: normal; font-variant: no
 
 }
 
+.login{
+    padding-bottom: 5% ;
+ }
 .navbar.sticky{
   position: fixed;
   width: 100%;
@@ -52,12 +56,72 @@ pre { font-family: Aladin; font-size: 13px; font-style: normal; font-variant: no
   border-color: #0d0115;
 }
 
+.btn-primary:hover{
+  background-color: #0d0115;
+  border-color:#26122e;
+}
+
+.btn-primary:active{
+  background-color: #26122e; 
+  border-color: #0d0115;
+}
+
+/* ___________________Login________________ */
+.login{
+  padding-top: 10%;
+  font-family: Aladin;
+}
+
+.login-header{
+  color:pink;
+  font-size: 24px;
+  font-style: normal;
+  background-color: #26122e;
+}
+
+
+
+.login-body{
+  background-color: #26122e;
+}
+
+label{
+  color: pink;
+}
+
+a{
+  color:white;
+  text-decoration: none;
+}
+
+a:hover{
+  color: pink;
+  text-decoration: none;
+}
+
+/* ---------------Media Query---------------- */
+
 @media screen and (max-width: 480px){
   section {
     padding-left: 10px;
     padding-right: 10px;
-    margin-left: 0px !important;
-    margin-right: 0 !important;
+    margin-left: 20px !important;
+    margin-right: 20px !important;
 
   }
+
+  .banner{
+    padding-top: 37% !important ;
+    width:100% !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    
+  }
+
+  .login{
+   padding-top:50% !important;
+   padding-bottom: 20% !important;
+  }
 }
+
+

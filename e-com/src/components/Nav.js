@@ -1,6 +1,21 @@
 import React from 'react'
 import './Pages/Home/home.css'
+
+import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+import firebase from "firebase/compat/app";
 const Nav=()=>{
+  let dispatch =useDispatch();
+  let history=useHistory();
+  const logout=()=>{
+
+    firebase.auth().signOut();
+    dispatch({
+      type:"LOGOUT",
+      payload:null,
+    })
+    history.push('/login')
+  }
     return(
 
         <nav class="navbar navbar-expand-lg navbar-dark sticky" style={{
@@ -41,6 +56,7 @@ const Nav=()=>{
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Featured Products</a>
           <a class="dropdown-item" href="#">Contact us</a>
+          <span class="dropdown-item" onClick={logout}>logout</span>
         </div>
       </li>
     </ul>

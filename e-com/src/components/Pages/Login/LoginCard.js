@@ -1,41 +1,86 @@
-import React from "react";
-import './login.css'
+import React,{useState} from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import { auth } from "../../../firebase";
 const LoginCart=() =>{
+    let dispatch= useDispatch()
+    let history=useHistory()
+    const [email,setEmail]=useState("");
+    const [password, setPassword]=useState("")
+    const handleSubmit= async(e)=>{
+      e.preventDefault();
+        try{console.log(email, password)
+        const result= await  auth.signInWithEmailAndPassword(email,password);
+        console.log(result)
+        const {user} =result
+        const authtoken= await user.getIdTokenResult()
+        dispatch({
+          type:"LOGGED_IN_USER",
+          payload:{
+            email: user.email,
+            token: authtoken.token
+          }
+        })
+        history.push('/')}
+        catch(error){
+          console.log(error)
+          toast.warning(error.message)
+        }
+        
+        
+    }
     return(
-    <div class="container mt-50" >
-    <div class="row">
-    <div class="col-md-6 mx-auto p-0">
-        <div class="login-card" style={{
-        marginTop:"20%",
-        marginBottom:"20%"
-    }}>
-            <div class="login-box">
-                <div class="login-snip"> <input id="tab-1" type="radio" name="tab" class="sign-in" checked/><label for="tab-1" class="tab">Login</label> <input id="tab-2" type="radio" name="tab" class="sign-up"/><label for="tab-2" class="tab">Sign Up</label>
-                    <div class="login-space">
-                        <div class="login">
-                            <div class="group"> <label for="user" class="label">Username</label> <input id="user" type="text" class="input" placeholder="Enter your username"/> </div>
-                            <div class="group"> <label for="pass" class="label">Password</label> <input id="pass" type="password" class="input" data-type="password" placeholder="Enter your password"/> </div>
-                            <div class="group"> <input id="check" type="checkbox" class="check" checked/> <label for="check"><span class="icon"></span> Keep me Signed in</label> </div>
-                            <div class="group"> <input type="submit" class="button" value="Sign In"/> </div>
-                            <div class="hr"></div>
-                            <div class="foot"> <a href="#">Forgot Password?</a> </div>
-                        </div>
-                        <div class="sign-up-form">
-                            <div class="group"> <label for="user" class="label">Username</label> <input id="user" type="text" class="input" placeholder="Create your Username"/> </div>
-                            <div class="group"> <label for="pass" class="label">Password</label> <input id="pass" type="password" class="input" data-type="password" placeholder="Create your password"/> </div>
-                            <div class="group"> <label for="pass" class="label">Repeat Password</label> <input id="pass" type="password" class="input" data-type="password" placeholder="Repeat your password"/> </div>
-                            <div class="group"> <label for="pass" class="label">Email Address</label> <input id="pass" type="text" class="input" placeholder="Enter your email address"/> </div>
-                            <div class="group"> <input type="submit" class="button" value="Sign Up"/> </div>
-                            <div class="hr"></div>
-                            <div class="foot"> <label for="tab-1">Already Member?</label> </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="container login col d-flex justify-content-center">
+            <div class="card login-card w-8" style={{
+                backgroundColor:"#26122e"
+            }}>
+                <div class="card">
+  <div class="card-header justify-content-center login-header text-center">
+        Log In
+  </div>
+  
+  <div class="card-body login-body">
+  <label class="card-text" style={{
+      paddingBottom: "10px"
+  }}>Welcome to Sanyam Enterprise, Please login to your account</label>
+  <form onSubmit={handleSubmit}>
+  <div class="form-group">
+    <label>Email address</label>
+    <input type="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email" value={email} onChange={e=> setEmail(e.target.value)}/>
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label>Password</label>
+    <input type="password" class="form-control" placeholder="Password" value={password} onChange={e=> setPassword(e.target.value)}/>
+  </div>
+  <div class="form-check">
+    <input type="checkbox" class="form-check-input"/>
+    <label class="form-check-label">Check me out</label>
+  </div>
+  <div class="text-center">
+  <button type="submit" class="btn btn-primary ">Sign In</button>
+  </div>
+  <div class="row">
+      <div class=" text-center  col-sm-12 p-10" style={{
+      paddingBottom: "10px"
+  }}>
+            <a href="#"> Create a New Account</a>
+      </div>
+      <div class="text-center col-sm-12 p-10" style={{
+      paddingBottom: "10px"
+  }}>
+            <a href="#">Forgot Password</a>
+      </div>
+
+  </div>
+</form>
+  </div>
+  
+</div>
             </div>
+            
         </div>
-    </div>
-</div>
-</div>
     );
 }
 
