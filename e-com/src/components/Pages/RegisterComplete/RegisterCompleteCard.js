@@ -15,6 +15,7 @@ const RegisterCompleteCart=({history}) =>{
     const handleSubmit=async(e)=>{
         e.preventDefault();
         if (!email || !password){
+          console.log(email, password)
           toast.error("Email & Password cannot be empty")
           return
         }
@@ -64,7 +65,7 @@ const RegisterCompleteCart=({history}) =>{
   <form onSubmit={handleSubmit}>
   <div class="form-group">
     <label>Email address</label>
-    <input type="email" class="form-control disabled" aria-describedby="emailHelp" placeholder="Enter email" value={email} />
+    <input type="email" class="form-control disabled" aria-describedby="emailHelp" placeholder="Enter email" value={email} readOnly/>
     <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
   </div>
   <div class="form-group">

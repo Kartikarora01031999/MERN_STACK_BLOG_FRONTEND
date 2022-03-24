@@ -65,7 +65,7 @@ const LoginCart=() =>{
       <div class=" text-center  col-sm-12 p-10" style={{
       paddingBottom: "10px"
   }}>
-            <a href="#"> Create a New Account</a>
+            <a href="/signup"> Create a New Account</a>
       </div>
       <div class="text-center col-sm-12 p-10" style={{
       paddingBottom: "10px"
