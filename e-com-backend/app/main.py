@@ -7,10 +7,11 @@ from flask_mongoengine import MongoEngine
 import cloudinary
 import cloudinary.uploader
 import pymongo
-from models import User,Cart,Order
+from models import *
 from pymongo import MongoClient, ReturnDocument
 import urllib
 from bson.json_util import dumps,loads
+from helpers import *
 ''' firebase modules '''
 import os
 import firebase_admin
@@ -32,6 +33,10 @@ cred = credentials.Certificate("./serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
 app = Flask(__name__, template_folder='templates',static_folder='static')
 app.secret_key = "abc"
+app.config['MONGODB_SETTINGS'] = {
+    'host': "mongodb+srv://kartik:Kartik_01@cluster0.fvxsb.mongodb.net/EcomDataBase?retryWrites=true&w=majority",
+}
+CORS(app)
 CORS(app)
 db = MongoEngine()
 db.init_app(app)
@@ -47,10 +52,10 @@ pb = Firebase(firebaseConfig)
 
 sendgrid_api_key = os.getenv('SENDGRID_API_KEY')
 
-users = ecom_db["User"]
-jewellery_boxes = ecom_db["JewelleryBox"]
-jewellery_bages = ecom_db["JewelleryBag"]
-carts = ecom_db["Cart"]
+users = ecom_db["user"]
+jewellery_boxes = ecom_db["jewellery_box"]
+jewellery_bages = ecom_db["jewellery_bag"]
+carts = ecom_db["cart"]
 
 
 #Wrap check token
@@ -61,6 +66,8 @@ def check_token(f):
     '''
 
     def wrap(*args,**kwargs):
+        print(request.headers)
+        print(request.headers.get('authorization'))
         if not request.headers.get('authorization'):
             return {'message': 'No token provided'},400
         try:
@@ -83,24 +90,26 @@ def create_update_user():
     '''
     print(request.user)
     email=request.user["email"]
-    name = request.json["name"]
-    user=users.find_one_and_update({"email": email},{"$set":{"name":name, "email":email}}, return_document=ReturnDocument.AFTER)
+    user=users.find_one_and_update({"email": email},{"$set":{"email":email}}, return_document=ReturnDocument.AFTER)
     if user:
-        return jsonify({"data": user}),200
+        return jsonify(user),200
     else:
         doc={'_id': uuid.uuid4().hex,
-        'name': name,
+        'name': "",
         'email':email,
         'phone_number':"",
-        'user_type':'user',
+        'role':'user',
         "business_name":"",
-        "GSTIn":"",
-        "cart_id":"",
-        "Address":""
+        "gst_in":"",
+        "cart":"",
+        "address":""
         }
         user=users.insert_one(doc)
-        return jsonify({"message": "User Created"}),200
-
+        return jsonify({
+        "_id": user.inserted_id,
+        "email": email,
+        "role":"user"
+        }),200
 
 
 
@@ -147,6 +156,148 @@ def contact_us():
     except Exception:
         return jsonify({"error":"Unable to contact"}),404
 
+'''
+jewellery_box API KEYS
+---------------------------------------------------------------------------------------------------------------------------------------------
+'''
+@app.route('/api/admin/create-jewellery-box', methods= ["POST"])
+@check_token
+def create_jewellery_box():
+    '''
+    Admin to Create jewellery-box
+    '''
+    print(request.user["email"])
+    user =User.objects(email=request.user["email"]).first()
+    print(request.json)
+    if user['role']=="admin":
+        jewellery_box_items = request.json
+        print(jewellery_box_items)
+        try:
+            jewellery_box = add_jewellery_box_helper(jewellery_box_items, "JewelleryBox")
+            jewellery_box.save()
+        except Exception as e:
+            return jsonify({"error": str(e)[:100]}),400
+        return jsonify({"data": jewellery_box, "message": "jewellery_box Created"})
+    else:
+        return jsonify({"message": "Unauthorized User"}),403
+
+@app.route("/api/admin/delete-jewellery-box", methods=["POST"])
+@check_token
+def delete_jewellery_box():
+    '''
+    Admin to Delete jewellery-box
+    '''
+    user =User.objects(email=request.user['email']).first()
+    if user['role']=="admin":
+        try:
+            jewellery_box = JewelleryBox.objects(id =request.json["_id"] ).first()
+            print(jewellery_box.id)
+            jewellery_box.delete()
+            return jsonify({"message": "jewellery_box Deleted"}),204
+        except:
+            return jsonify({"error":"jewellery_box Not Found"}),404
+        
+    else:
+        return jsonify({"message": "Unauthorized User"}),403
+
+@app.route("/api/admin/get-jewellery-boxes", methods=["POST","GET"])
+#@check_token
+def get_all_jewellery_boxes():
+    '''
+    Admin Api to Fetch all jewellery-boxes
+
+    '''
+    hack= request.data
+    try:
+        page = request.json.get('page')
+        total_count= request.json["total_count"]
+        precount = total_count * (page-1)
+        count= total_count *page
+        jewellery_boxes=JewelleryBox.objects()[precount:count]
+    except:
+        print("contnue..")
+        jewellery_boxes=JewelleryBox.objects()
+    if jewellery_boxes:
+        return jsonify({"jewellery_boxes": jewellery_boxes}),200
+    else:
+        return jsonify("No jewellery_boxes found"),200
+
+@app.route("/api/get-jewellery-boxes-by-price", methods=["POST","GET"])
+#@check_token
+def get_all_jewellery_boxes_by_price():
+    '''
+    Admin Api to Fetch all jewellery-boxes
+
+    '''
+    hack= request.data
+    try:
+        page = request.json.get('page')
+        total_count= request.json["total_count"]
+        precount = total_count * (page-1)
+        count= total_count *page
+        if request.json["category"]=="":
+            jewellery_boxes=JewelleryBox.objects()[precount:count]
+        else:
+            jewellery_boxes=JewelleryBox.objects(category=request.json["category"])[precount:count]
+    except:
+        print("contnue..")
+        if request.json["category"]=="":
+            jewellery_boxes=JewelleryBox.objects()
+        else:
+            jewellery_boxes=JewelleryBox.objects(category=request.json["category"])
+    if jewellery_boxes:
+        jewellery_boxes=[jewellery_box  for jewellery_box in jewellery_boxes if jewellery_box.price in range(request.json["min"], request.json["max"]+1)] 
+    
+        return jsonify({"jewellery_box": jewellery_boxes}),200
+    else: return jsonify({"jewellery_boxes": []}),200
+
+@app.route("/api/get-jewellery-boxes-by-category", methods=["POST","GET"])
+#@check_token
+def get_all_jewellery_boxes_by_category():
+    '''
+    Admin Api to Fetch all Normal jewellery_boxes by category
+    '''
+    hack= request.data
+    try:
+        page = request.json.get('page')
+        total_count= request.json["total_count"]
+        precount = total_count * (page-1)
+        count= total_count *page
+        jewellery_boxes=JewelleryBox.objects(category=request.json["category"])[precount:count]
+    except:
+        print("contnue..")
+        jewellery_boxes=JewelleryBox.objects(category=request.json["category"]) 
+    if jewellery_boxes:
+        return jsonify({"jewellery_boxes": jewellery_boxes}),200
+    else: return jsonify({"jewellery_boxes": []}),200
+
+
+
+@app.route("/api/admin/update-jewellery-box", methods=["POST"])
+@check_token
+def update_jewellery_box():
+    '''
+    Admin Api to update jewellery-box
+
+    '''
+    user =User.objects(email=request.user['email']).first() 
+    if user['role']=="admin":
+        try: 
+            jewellery_box_items=request.json
+            try:
+                app_jewellery_box=JewelleryBox.objects(id = request.json.get('_id')).first()
+            except:
+                return jsonify({"error":"jewellery_box Not Found"}),404
+            jewellery_box = update_jewellery_box_helper(jewellery_box_items, app_jewellery_box)
+            jewellery_box.save()
+            return jsonify({"message":"jewellery_box Updated Successfully"}),200
+        except Exception as e:
+            return jsonify({"message": str(e)[:100]}),400      
+    else:
+        return jsonify({"message": "Unauthorized User"}),403
+
+
+'''_____________________________________Test___________________________________________________ '''
 
 #Api route to sign up a new user
 @app.route('/api/signup', methods=["POST"])
@@ -160,6 +311,8 @@ def signup():
         return {'message': f'Successfully created user'},200
     except Exception as e:
         print(e)
+        if "EMAIL_EXISTS" in str(e):
+            return {'message': 'user Already Exist'},400
         traceback.print_exec()
         return {'message': 'Error creating user'},400
         

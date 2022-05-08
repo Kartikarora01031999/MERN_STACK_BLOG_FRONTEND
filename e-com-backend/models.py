@@ -3,7 +3,7 @@ import datetime
 from enum import Enum
 
 class User(me.Document):
-    name = me.StringField(required=True)
+    name = me.StringField()
     email=me.StringField(required = True, unique= True)
     role = me.StringField(default = "user")
     cart = me.StringField(default= "")
@@ -40,6 +40,20 @@ class Order(me.Document):
     order_phone = me.StringField(required= True)
     order_quantity= me.IntField(required=True, default=1)
     order_size =me.StringField(required= True)
+    created_at = me.StringField(default= datetime.datetime.now().isoformat())
+    modified_at = me.StringField(default= datetime.datetime.now().isoformat())
+
+class JewelleryBox(me.Document):
+    name=me.StringField(required=True, unique=True)
+    description= me.StringField()
+    price = me.FloatField(required=True)
+    limit=me.IntField()
+    category=me.StringField()
+    size=me.StringField()
+    sold= me.IntField(default=0)
+    inStock = me.BooleanField(default=True)
+    image=me.ListField(required=True)
+    quantity=me.IntField(required=True)
     created_at = me.StringField(default= datetime.datetime.now().isoformat())
     modified_at = me.StringField(default= datetime.datetime.now().isoformat())
 

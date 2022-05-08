@@ -1,28 +1,42 @@
-import React,{useState} from "react";
-import { useDispatch } from "react-redux";
+import React,{useState,useEffect} from "react";
+import { useDispatch,useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { auth } from "../../../firebase";
+import { createUpdateUser } from "../../../Functions/Auth";
 const LoginCart=() =>{
     let dispatch= useDispatch()
     let history=useHistory()
     const [email,setEmail]=useState("");
     const [password, setPassword]=useState("")
+    let {user}=useSelector((state)=>((state)))
+    useEffect(() => {
+      if (user && user.token){history.push("/");}
+    }, [user, history])
     const handleSubmit= async(e)=>{
       e.preventDefault();
-        try{console.log(email, password)
+        try{
+        console.log(email, password)
         const result= await  auth.signInWithEmailAndPassword(email,password);
         console.log(result)
         const {user} =result
         const authtoken= await user.getIdTokenResult()
-        dispatch({
-          type:"LOGGED_IN_USER",
-          payload:{
-            email: user.email,
-            token: authtoken.token
-          }
-        })
-        history.push('/')}
+        console.log(authtoken.token)
+        createUpdateUser(authtoken.token).then((res)=> {
+          console.log(res.data)
+          dispatch({
+            type:"LOGGED_IN_USER",
+            payload:{
+              email: res.data.email,
+              token: authtoken.token,
+              _id: res.data._id,
+              role: res.data.role
+            }
+          })
+          history.push('/')}
+        ).catch((err) =>{console.log(err)
+          toast.warning(err.message)});
+        }
         catch(error){
           console.log(error)
           toast.warning(error.message)
@@ -70,7 +84,7 @@ const LoginCart=() =>{
       <div class="text-center col-sm-12 p-10" style={{
       paddingBottom: "10px"
   }}>
-            <a href="#">Forgot Password</a>
+            <a href="/">Forgot Password</a>
       </div>
 
   </div>

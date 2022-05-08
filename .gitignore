@@ -39,6 +39,7 @@ build/Release
 
 # Dependency directories
 node_modules/
+e-com/.firebase/
 jspm_packages/
 e-com-backend/venv/
 e-com-backend/.env
@@ -107,4 +108,3 @@ dist
 # TernJS port file
 .tern-port
 
-e-com/.firebase/hosting.YnVpbGQ.cache
