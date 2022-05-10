@@ -109,3 +109,5 @@ dist
 # TernJS port file
 .tern-port
 
+e-com-backend/__pycache__/helpers.cpython-39.pyc
+e-com-backend/__pycache__/models.cpython-39.pyc

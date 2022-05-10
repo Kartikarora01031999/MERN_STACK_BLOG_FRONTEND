@@ -45,6 +45,32 @@ def add_jewellery_box_helper(jewellery_box_items, model):
         image = image,
         limit = limit,
         inStock=inStock)
+
+    if model =="JewelleryPouch":
+
+        return JewelleryPouch(name = name,
+        price = price,
+        category = category,
+        description = description,
+        size = size,
+        quantity = quantity,
+        sold = sold,
+        image = image,
+        limit = limit,
+        inStock=inStock)
+    
+    if model =="JewelleryTool":
+
+        return JewelleryTool(name = name,
+        price = price,
+        category = category,
+        description = description,
+        size = size,
+        quantity = quantity,
+        sold = sold,
+        image = image,
+        limit = limit,
+        inStock=inStock)
     
 def update_jewellery_box_helper(jewellery_box_items, jewellery_box):
     '''
