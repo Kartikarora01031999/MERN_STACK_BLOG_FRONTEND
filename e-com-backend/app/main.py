@@ -296,6 +296,146 @@ def update_jewellery_box():
     else:
         return jsonify({"message": "Unauthorized User"}),403
 
+'''
+jewellery_bag API KEYS
+---------------------------------------------------------------------------------------------------------------------------------------------
+'''
+@app.route('/api/admin/create-jewellery-bag', methods= ["POST"])
+@check_token
+def create_jewellery_bag():
+    '''
+    Admin to Create jewellery-bag
+    '''
+    print(request.user["email"])
+    user =User.objects(email=request.user["email"]).first()
+    print(request.json)
+    if user['role']=="admin":
+        jewellery_bag_items = request.json
+        print(jewellery_bag_items)
+        try:
+            jewellery_bag = add_jewellery_box_helper(jewellery_bag_items, "JewelleryBag")
+            jewellery_bag.save()
+        except Exception as e:
+            return jsonify({"error": str(e)[:100]}),400
+        return jsonify({"data": jewellery_bag, "message": "jewellery_bag Created"})
+    else:
+        return jsonify({"message": "Unauthorized User"}),403
+
+@app.route("/api/admin/delete-jewellery-bag", methods=["POST"])
+@check_token
+def delete_jewellery_bag():
+    '''
+    Admin to Delete jewellery-bag
+    '''
+    user =User.objects(email=request.user['email']).first()
+    if user['role']=="admin":
+        try:
+            jewellery_bag = JewelleryBag.objects(id =request.json["_id"] ).first()
+            print(jewellery_bag.id)
+            jewellery_bag.delete()
+            return jsonify({"message": "jewellery_bag Deleted"}),204
+        except:
+            return jsonify({"error":"jewellery_bag Not Found"}),404
+        
+    else:
+        return jsonify({"message": "Unauthorized User"}),403
+
+@app.route("/api/admin/get-jewellery-bages", methods=["POST","GET"])
+#@check_token
+def get_all_jewellery_bages():
+    '''
+    Admin Api to Fetch all jewellery-bages
+
+    '''
+    hack= request.data
+    try:
+        page = request.json.get('page')
+        total_count= request.json["total_count"]
+        precount = total_count * (page-1)
+        count= total_count *page
+        jewellery_bages=JewelleryBag.objects()[precount:count]
+    except:
+        print("contnue..")
+        jewellery_bages=JewelleryBag.objects()
+    if jewellery_bages:
+        return jsonify({"jewellery_bages": jewellery_bages}),200
+    else:
+        return jsonify("No jewellery_bages found"),200
+
+@app.route("/api/get-jewellery-bages-by-price", methods=["POST","GET"])
+#@check_token
+def get_all_jewellery_bages_by_price():
+    '''
+    Admin Api to Fetch all jewellery-bages
+
+    '''
+    hack= request.data
+    try:
+        page = request.json.get('page')
+        total_count= request.json["total_count"]
+        precount = total_count * (page-1)
+        count= total_count *page
+        if request.json["category"]=="":
+            jewellery_bages=JewelleryBag.objects()[precount:count]
+        else:
+            jewellery_bages=JewelleryBag.objects(category=request.json["category"])[precount:count]
+    except:
+        print("contnue..")
+        if request.json["category"]=="":
+            jewellery_bages=JewelleryBag.objects()
+        else:
+            jewellery_bages=JewelleryBag.objects(category=request.json["category"])
+    if jewellery_bages:
+        jewellery_bages=[jewellery_bag  for jewellery_bag in jewellery_bages if jewellery_bag.price in range(request.json["min"], request.json["max"]+1)] 
+    
+        return jsonify({"jewellery_bag": jewellery_bages}),200
+    else: return jsonify({"jewellery_bages": []}),200
+
+@app.route("/api/get-jewellery-bages-by-category", methods=["POST","GET"])
+#@check_token
+def get_all_jewellery_bages_by_category():
+    '''
+    Admin Api to Fetch all Normal jewellery_bages by category
+    '''
+    hack= request.data
+    try:
+        page = request.json.get('page')
+        total_count= request.json["total_count"]
+        precount = total_count * (page-1)
+        count= total_count *page
+        jewellery_bages=JewelleryBag.objects(category=request.json["category"])[precount:count]
+    except:
+        print("contnue..")
+        jewellery_bages=JewelleryBag.objects(category=request.json["category"]) 
+    if jewellery_bages:
+        return jsonify({"jewellery_bages": jewellery_bages}),200
+    else: return jsonify({"jewellery_bages": []}),200
+
+
+
+@app.route("/api/admin/update-jewellery-bag", methods=["POST"])
+@check_token
+def update_jewellery_bag():
+    '''
+    Admin Api to update jewellery-bag
+
+    '''
+    user =User.objects(email=request.user['email']).first() 
+    if user['role']=="admin":
+        try: 
+            jewellery_bag_items=request.json
+            try:
+                app_jewellery_bag=JewelleryBag.objects(id = request.json.get('_id')).first()
+            except:
+                return jsonify({"error":"jewellery_bag Not Found"}),404
+            jewellery_bag = update_jewellery_box_helper(jewellery_bag_items, app_jewellery_bag)
+            jewellery_bag.save()
+            return jsonify({"message":"jewellery_bag Updated Successfully"}),200
+        except Exception as e:
+            return jsonify({"message": str(e)[:100]}),400      
+    else:
+        return jsonify({"message": "Unauthorized User"}),403
+
 
 '''_____________________________________Test___________________________________________________ '''
 

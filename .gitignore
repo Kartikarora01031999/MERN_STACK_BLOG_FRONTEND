@@ -45,6 +45,7 @@ e-com-backend/venv/
 e-com-backend/.env
 e-com/.firebaserc
 e-com/firebase.json
+e-com-backend/__pycache__/
 e-com-backend/app/__pycache__/
 # TypeScript v1 declaration files
 typings/

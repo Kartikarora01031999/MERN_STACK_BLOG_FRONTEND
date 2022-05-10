@@ -57,6 +57,20 @@ class JewelleryBox(me.Document):
     created_at = me.StringField(default= datetime.datetime.now().isoformat())
     modified_at = me.StringField(default= datetime.datetime.now().isoformat())
 
+class JewelleryBag(me.Document):
+    name=me.StringField(required=True, unique=True)
+    description= me.StringField()
+    price = me.FloatField(required=True)
+    limit=me.IntField()
+    category=me.StringField()
+    size=me.StringField()
+    sold= me.IntField(default=0)
+    inStock = me.BooleanField(default=True)
+    image=me.ListField(required=True)
+    quantity=me.IntField(required=True)
+    created_at = me.StringField(default= datetime.datetime.now().isoformat())
+    modified_at = me.StringField(default= datetime.datetime.now().isoformat())
+
 
 
 

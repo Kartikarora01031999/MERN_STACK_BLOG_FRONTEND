@@ -33,6 +33,19 @@ def add_jewellery_box_helper(jewellery_box_items, model):
         limit = limit,
         inStock=inStock)
     
+    if model =="JewelleryBag":
+
+        return JewelleryBag(name = name,
+        price = price,
+        category = category,
+        description = description,
+        size = size,
+        quantity = quantity,
+        sold = sold,
+        image = image,
+        limit = limit,
+        inStock=inStock)
+    
 def update_jewellery_box_helper(jewellery_box_items, jewellery_box):
     '''
     Function to Update jewellery_box 
